@@ -31,3 +31,5 @@ else if(dir==2){
 else if(dir==3){
   projectile.move(0 5);
 }
+
+// http://en.sfml-dev.org/forums/index.php?topic=1646.0
