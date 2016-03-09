@@ -6,7 +6,7 @@ int v=6; // Velocidad del proyectil
 int x0; // Posicion inicial del proyectil (Deberia crearse delante de donde mire el sprite)
 
 /* 
- * Al pulsar a en el mando de xbox o space en el teclado mantiene un bool a true y activa el clock de coldown de disparo
+ * Al pulsar a en el mando de xbox o space en el teclado activa el clock de coldown de disparo y el clock de duracion de disparo
  * Se activa el clock que controla el bucle un tiempo para hacer desaparecer el proyectil al pasar un tiempo
  * Entra a un bucle
  * El bucle crea un proyectil
