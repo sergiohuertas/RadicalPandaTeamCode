@@ -1,3 +1,31 @@
 // Para crear tiempo entre disparo y disparo habra que crear un clock
-// Utilizar la formula del MRU para la velocidad del proyectil
-// 
+// El tiempo que esta el proyectil en el aire viene dado por un clock
+// Un entero determina la direccion en la que mira el sprite (0, 1, 2, 3) [4 direcciones] Angulo=90 grados
+
+int v=6; // Velocidad del proyectil
+int x0; // Posicion inicial del proyectil (Deberia crearse delante de donde mire el sprite)
+
+/* 
+ * Al pulsar a en el mando de xbox o space en el teclado mantiene un bool a true y activa el clock de coldown de disparo
+ * Se activa el clock que controla el bucle un tiempo para hacer desaparecer el proyectil al pasar un tiempo
+ * Entra a un bucle
+ * El bucle crea un proyectil
+ * Mueve el proyectil por la pantalla hasta que choque/hasta que llegue a x distancia (x0+algo)
+ * Si interseca con la hitbox de un enemigo, debe bajar la vida del enemigo (No se programa en el ejecutable del hito1)
+ * Al intersecar o al llegar a x tiempo, deja de dibujar el proyectil 
+ */
+x0=archer.getPosition();
+dir=dondemiresprite; //0,1,2,3
+
+if(dir==0){
+  projectile.move(5 0);
+}
+else if(dir==1){
+  projectile.move(0 -5);
+}
+else if(dir==2){
+  projectile.move(-5 0);
+}
+else if(dir==3){
+  projectile.move(0 5);
+}
