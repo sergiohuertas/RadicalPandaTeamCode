@@ -1,37 +1,273 @@
-// Para crear tiempo entre disparo y disparo habra que crear un clock
-// El tiempo que esta el proyectil en el aire viene dado por un clock
-// Un entero determina la direccion en la que mira el sprite (0, 1, 2, 3) [4 direcciones] Angulo=90 grados
-
-int v=6; // Velocidad del proyectil
-int x0; // Posicion inicial del proyectil (Deberia crearse delante de donde mire el sprite)
-
-/* 
- * Al pulsar a en el mando de xbox o space en el teclado activa el clock de coldown de disparo y el clock de duracion de disparo
- * Se activa el clock que controla el bucle un tiempo para hacer desaparecer el proyectil al pasar un tiempo
- * Entra a un bucle
- * El bucle crea un proyectil
- * Mueve el proyectil por la pantalla hasta que choque/hasta que llegue a x distancia (x0+algo)
- * Si interseca con la hitbox de un enemigo, debe bajar la vida del enemigo (No se programa en el ejecutable del hito1)
- * Al intersecar o al llegar a x tiempo, deja de dibujar el proyectil 
- */
-x0=archer.getPosition();
-dir=dondemiresprite; //0,1,2,3
-
-if(dir==0){
-  projectile.move(5 0);
-}
-else if(dir==1){
-  projectile.move(0 -5);
-}
-else if(dir==2){
-  projectile.move(-5 0);
-}
-
-
-else if(dir==3){
-  projectile.move(0 5);
-}
-
 // http://en.sfml-dev.org/forums/index.php?topic=1646.0
 // http://stackoverflow.com/questions/16442182/sfml-2-0-c-projectiles
 // https://www.youtube.com/watch?v=M5B4faQXHkE
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#define _USE_MATH_DEFINES // for C++
+#include <cmath>
+
+#define kVel 5
+
+int main()
+{
+    //Creamos una ventana 
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "Prueba Proyectiles");
+
+    //Cargo la imagen donde reside la textura del sprite
+    sf::Texture tex;
+    if (!tex.loadFromFile("resources/archer_ss.png"))
+    {
+        std::cerr << "Error cargando la imagen archer_ss.png";
+        exit(0);
+    }
+    
+    //Y creo el spritesheet a partir de la imagen anterior
+    sf::Sprite sprite(tex);
+    
+    //Le pongo el centroide donde corresponde
+    sprite.setOrigin(82/2,59/2);
+    //Cojo el sprite que me interesa por defecto del sheet
+    sprite.setTextureRect(sf::IntRect(0*41, 0*59, 41, 59));
+
+    
+    // Lo dispongo en el centro de la pantalla
+    sprite.setPosition(540, 360);   
+    
+    // Variables proyectil
+    int mSpeed=2;
+    int direction=2; // 1 - up, 2 - down, 3 - left, 4 - right
+    int pDir=2;
+    bool life=false;
+    sf::Clock clock;
+    sf::RectangleShape rect;
+    rect.setSize(sf::Vector2f(25, 25));
+    rect.setPosition(-50, -50);
+    rect.setFillColor(sf::Color::Green);
+    
+    // Variables abanico
+    bool lifeA=false;
+    int aDir=2;
+    float aMSpeed=2;
+    float angle1=M_PI/6;
+    float angle2=angle1/2;
+    sf::RectangleShape rect1;
+    sf::RectangleShape rect2;
+    sf::RectangleShape rect3;
+    sf::RectangleShape rect4;
+    sf::RectangleShape rect5;
+    rect1.setSize(sf::Vector2f(25, 25));
+    rect1.setPosition(-50, -50);
+    rect1.setFillColor(sf::Color::Red);
+    rect2.setSize(sf::Vector2f(25, 25));
+    rect2.setPosition(-50, -50);
+    rect2.setFillColor(sf::Color::Red);
+    rect3.setSize(sf::Vector2f(25, 25));
+    rect3.setPosition(-50, -50);
+    rect3.setFillColor(sf::Color::Red);
+    rect4.setSize(sf::Vector2f(25, 25));
+    rect4.setPosition(-50, -50);
+    rect4.setFillColor(sf::Color::Red);
+    rect5.setSize(sf::Vector2f(25, 25));
+    rect5.setPosition(-50, -50);
+    rect5.setFillColor(sf::Color::Red);
+    sf::Clock clockA;
+  
+    
+    //Bucle del juego
+    while (window.isOpen())
+    {
+        // Disparo basico
+        if(rect.getPosition().x<0 || rect.getPosition().x>1080 || rect.getPosition().y<0 || rect.getPosition().y>720)
+            life=false;
+        
+        if(!life){
+            if (direction == 1) // Up
+            {
+                pDir=1;
+            }
+            if (direction == 2) // Down
+            {
+                pDir=2;
+            }
+            if (direction == 3) // Left
+            {
+                pDir=3;
+            }
+            if (direction == 4) // Right
+            {
+                pDir=4;
+            }
+        }
+        if (pDir == 1) // Up
+        {
+            rect.move(0, -mSpeed);
+        }
+        if (pDir == 2) // Down
+        {
+            rect.move(0, mSpeed);
+        }
+        if (pDir == 3) // Left
+        {
+            rect.move(-mSpeed, 0);
+        }
+        if (pDir == 4) // Right
+        {
+            rect.move(mSpeed, 0);
+        }
+        
+        if(clock.getElapsedTime().asSeconds() >= 1){
+            if(!life){
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                {
+                    life=true;
+                    rect.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    clock.restart();
+                }
+            }
+        }
+        // Abanico
+        if(rect1.getPosition().x<0 || rect1.getPosition().x>1080 || rect1.getPosition().y<0 || rect1.getPosition().y>720)
+            lifeA=false;
+        
+        if(!lifeA){
+            if (direction == 1) // Up
+            {
+                aDir=1;
+            }
+            if (direction == 2) // Down
+            {
+                aDir=2;
+            }
+            if (direction == 3) // Left
+            {
+                aDir=3;
+            }
+            if (direction == 4) // Right
+            {
+                aDir=4;
+            }
+        }
+        if (aDir == 1) // Up
+        {
+            rect1.move(0, -aMSpeed);
+            rect2.move(aMSpeed*sin(angle1), -aMSpeed*cos(angle1));
+            rect3.move(-aMSpeed*sin(angle1), -aMSpeed*cos(angle1));
+            rect4.move(aMSpeed*sin(angle2), -aMSpeed*cos(angle2));
+            rect5.move(-aMSpeed*sin(angle2), -aMSpeed*cos(angle2));
+        }
+        if (aDir == 2) // Down
+        {
+            rect1.move(0, aMSpeed);
+            rect2.move(aMSpeed*sin(angle1), aMSpeed*cos(angle1));
+            rect3.move(-aMSpeed*sin(angle1), aMSpeed*cos(angle1));
+            rect4.move(aMSpeed*sin(angle2), aMSpeed*cos(angle2));
+            rect5.move(-aMSpeed*sin(angle2), aMSpeed*cos(angle2));
+        }
+        if (aDir == 3) // Left
+        {
+            rect1.move(-mSpeed, 0);
+            rect2.move(-aMSpeed*cos(angle1), -aMSpeed*sin(angle1));
+            rect3.move(-aMSpeed*cos(angle1), aMSpeed*sin(angle1));
+            rect4.move(-aMSpeed*cos(angle2), -aMSpeed*sin(angle2));
+            rect5.move(-aMSpeed*cos(angle2), aMSpeed*sin(angle2));
+        }
+        if (aDir == 4) // Right
+        {
+            rect1.move(aMSpeed, 0);
+            rect2.move(aMSpeed*cos(angle1), aMSpeed*sin(angle1));
+            rect3.move(aMSpeed*cos(angle1), -aMSpeed*sin(angle1));
+            rect4.move(aMSpeed*cos(angle2), aMSpeed*sin(angle2));
+            rect5.move(aMSpeed*cos(angle2), -aMSpeed*sin(angle2));
+        }
+        
+        if(clockA.getElapsedTime().asSeconds() >= 3){
+            if(!lifeA){
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+                {
+                    lifeA=true;
+                    rect1.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    rect2.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    rect3.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    rect4.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    rect5.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    clockA.restart();
+                }
+            }
+        }
+        
+        //Bucle de obtención de eventos
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            
+            switch(event.type){
+                
+                //Si se recibe el evento de cerrar la ventana la cierro
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                    
+                //Se pulsó una tecla, imprimo su codigo
+                case sf::Event::KeyPressed:
+                    
+                    //Verifico si se pulsa alguna tecla de movimiento
+                    switch(event.key.code) {
+                        
+                        //Mapeo del cursor
+                        case sf::Keyboard::Right:
+                            sprite.setTextureRect(sf::IntRect(0*41, 2*59, 41, 59));
+                            sprite.move(kVel,0);
+                            direction=4;
+                        break;
+
+                        case sf::Keyboard::Left:
+                            sprite.setTextureRect(sf::IntRect(0*41, 1*59, 41, 59));
+                            sprite.move(-kVel,0);
+                            direction=3;
+                        break;
+                        
+                        case sf::Keyboard::Up:
+                            sprite.setTextureRect(sf::IntRect(0*41, 3*59, 41, 59));
+                            sprite.move(0,-kVel);
+                            direction=1;
+                        break;
+                        
+                        case sf::Keyboard::Down:
+                            sprite.setTextureRect(sf::IntRect(0*41, 0*59, 41, 59));
+                            sprite.move(0,kVel);
+                            direction=2;
+                        break;
+                        
+                        
+                        //Tecla ESC para salir
+                        case sf::Keyboard::Escape:
+                            window.close();
+                        break;
+                        
+                        //Cualquier tecla desconocida se imprime por pantalla su código
+                        default:
+                            std::cout << event.key.code << std::endl;
+                        break;
+                              
+                    }
+
+            }
+            
+        }
+
+        window.clear(sf::Color::White);
+        window.draw(sprite);
+        if(life)
+            window.draw(rect);
+        if(lifeA){
+            window.draw(rect1);
+            window.draw(rect2);
+            window.draw(rect3);
+            window.draw(rect4);
+            window.draw(rect5);
+        }
+        window.display();
+    }
+
+    return 0;
+}
