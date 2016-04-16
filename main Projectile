@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #define _USE_MATH_DEFINES // for C++
 #include <cmath>
+#include "projectile.h"
 
 #define kVel 5
 
@@ -33,16 +34,19 @@ int main()
     // Lo dispongo en el centro de la pantalla
     sprite.setPosition(540, 360);   
     
-    // Variables proyectil
-    int mSpeed=2;
+    // Direccion personaje
     int direction=2; // 1 - up, 2 - down, 3 - left, 4 - right
-    int pDir=2;
+    
+    // Variables proyectil
+    /*int mSpeed=2;
+    int pDir=2;*/
+    class projectile p1;
     bool life=false;
     sf::Clock clock;
-    sf::RectangleShape rect;
+    /*sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(25, 25));
     rect.setPosition(-50, -50);
-    rect.setFillColor(sf::Color::Green);
+    rect.setFillColor(sf::Color::Green);*/
     
     // Variables abanico
     bool lifeA=false;
@@ -77,28 +81,28 @@ int main()
     while (window.isOpen())
     {
         // Disparo basico
-        if(rect.getPosition().x<0 || rect.getPosition().x>1080 || rect.getPosition().y<0 || rect.getPosition().y>720)
+        if(p1.getXPosition()<0 || p1.getXPosition()>1080 || p1.getYPosition()<0 || p1.getYPosition()>720)
             life=false;
         
         if(!life){
             if (direction == 1) // Up
             {
-                pDir=1;
+                p1.setDirection(1);
             }
             if (direction == 2) // Down
             {
-                pDir=2;
+                p1.setDirection(2);
             }
             if (direction == 3) // Left
             {
-                pDir=3;
+                p1.setDirection(3);
             }
             if (direction == 4) // Right
             {
-                pDir=4;
+                p1.setDirection(4);
             }
         }
-        if (pDir == 1) // Up
+        /*if (pDir == 1) // Up
         {
             rect.move(0, -mSpeed);
         }
@@ -114,13 +118,15 @@ int main()
         {
             rect.move(mSpeed, 0);
         }
+        */
+        p1.move();
         
         if(clock.getElapsedTime().asSeconds() >= 1){
             if(!life){
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
                 {
                     life=true;
-                    rect.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    p1.setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     clock.restart();
                 }
             }
@@ -165,7 +171,7 @@ int main()
         }
         if (aDir == 3) // Left
         {
-            rect1.move(-mSpeed, 0);
+            rect1.move(-aMSpeed, 0);
             rect2.move(-aMSpeed*cos(angle1), -aMSpeed*sin(angle1));
             rect3.move(-aMSpeed*cos(angle1), aMSpeed*sin(angle1));
             rect4.move(-aMSpeed*cos(angle2), -aMSpeed*sin(angle2));
@@ -258,7 +264,7 @@ int main()
         window.clear(sf::Color::White);
         window.draw(sprite);
         if(life)
-            window.draw(rect);
+            p1.draw(window);
         if(lifeA){
             window.draw(rect1);
             window.draw(rect2);
