@@ -8,6 +8,7 @@
 #include "projectile.h"
 
 #define kVel 5
+#define kVel2 5
 
 int main()
 {
@@ -21,6 +22,7 @@ int main()
         std::cerr << "Error cargando la imagen archer_ss.png";
         exit(0);
     }
+
     
     //Y creo el spritesheet a partir de la imagen anterior
     sf::Sprite sprite(tex);
@@ -40,7 +42,7 @@ int main()
     // Variables proyectil
     /*int mSpeed=2;
     int pDir=2;*/
-    class projectile p1;
+    
     bool life=false;
     sf::Clock clock;
     /*sf::RectangleShape rect;
@@ -75,16 +77,23 @@ int main()
     rect5.setPosition(-50, -50);
     rect5.setFillColor(sf::Color::Red);
     sf::Clock clockA;
-  
+    
+    projectile *p0;
+    projectile *p1;
+    projectile *p2;
+    projectile *p3;
+    projectile *p4;
+    projectile *p5;
+    projectile *p6;
     
     //Bucle del juego
     while (window.isOpen())
     {
         // Disparo basico
-        if(p1.getXPosition()<0 || p1.getXPosition()>1080 || p1.getYPosition()<0 || p1.getYPosition()>720)
-            life=false;
         
-        if(!life){
+        
+        
+       /* if(!life){
             if (direction == 1) // Up
             {
                 p1.setDirection(1);
@@ -101,7 +110,7 @@ int main()
             {
                 p1.setDirection(4);
             }
-        }
+        }*/
         /*if (pDir == 1) // Up
         {
             rect.move(0, -mSpeed);
@@ -119,23 +128,34 @@ int main()
             rect.move(mSpeed, 0);
         }
         */
-        p1.move();
         
-        if(clock.getElapsedTime().asSeconds() >= 1){
+        //p1.move();
+        
+        if(clock.getElapsedTime().asSeconds() >= 0.1){
             if(!life){
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
                 {
+                    p0 = new projectile(kVel2, 1, true, 3, (direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p6 = new projectile(*p0);
+                    //p6->setPosition(100, 600);
                     life=true;
-                    p1.setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    //p0->setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     clock.restart();
                 }
             }
         }
+        if(life){
+            if(p0->getXPosition()<0 || p0->getXPosition()>1080 || p0->getYPosition()<0 || p0->getYPosition()>720){
+                life=false;
+                delete p0;
+            }
+            p0->move();
+        }
         // Abanico
-        if(rect1.getPosition().x<0 || rect1.getPosition().x>1080 || rect1.getPosition().y<0 || rect1.getPosition().y>720)
-            lifeA=false;
+        /*if(rect1.getPosition().x<0 || rect1.getPosition().x>1080 || rect1.getPosition().y<0 || rect1.getPosition().y>720)
+            lifeA=false;*/
         
-        if(!lifeA){
+       /* if(!lifeA){
             if (direction == 1) // Up
             {
                 aDir=1;
@@ -152,7 +172,8 @@ int main()
             {
                 aDir=4;
             }
-        }
+        }*/
+         /*
         if (aDir == 1) // Up
         {
             rect1.move(0, -aMSpeed);
@@ -184,21 +205,54 @@ int main()
             rect3.move(aMSpeed*cos(angle1), -aMSpeed*sin(angle1));
             rect4.move(aMSpeed*cos(angle2), aMSpeed*sin(angle2));
             rect5.move(aMSpeed*cos(angle2), -aMSpeed*sin(angle2));
-        }
+        }*/
         
         if(clockA.getElapsedTime().asSeconds() >= 3){
             if(!lifeA){
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 {
                     lifeA=true;
+                    p1 = new projectile(kVel2, 1, true, 3, (direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p1->setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                   
+                    
+                    p2 = new projectile(kVel2, 1, true, 3, (M_PI/24)+(direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p2->setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    
+                    p3 = new projectile(kVel2, 1, true, 3, -(M_PI/24)+(direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p3->setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    
+                    p4 = new projectile(kVel2, 1, true, 3, (M_PI/12)+(direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p4->setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    
+                    p5 = new projectile(kVel2, 1, true, 3, -(M_PI/12)+(direction-1)*M_PI/2, sprite.getPosition().x,sprite.getPosition().y);
+                    //p5->setPosition(sprite.getPosition().x,sprite.getPosition().y);
+                    clockA.restart();
+                    
+                    /*lifeA=true;
                     rect1.setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     rect2.setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     rect3.setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     rect4.setPosition(sprite.getPosition().x,sprite.getPosition().y);
                     rect5.setPosition(sprite.getPosition().x,sprite.getPosition().y);
-                    clockA.restart();
+                    clockA.restart();*/
                 }
             }
+        }
+        if(lifeA){
+            if(p1->getXPosition()<0 || p1->getXPosition()>1080 || p1->getYPosition()<0 || p1->getYPosition()>720){
+                lifeA=false;
+                delete p1;
+                delete p2;
+                delete p3;
+                delete p4;
+                delete p5;
+            }
+            p1->move();
+            p2->move();
+            p3->move();
+            p4->move();
+            p5->move();
         }
         
         //Bucle de obtención de eventos
@@ -223,7 +277,7 @@ int main()
                         case sf::Keyboard::Right:
                             sprite.setTextureRect(sf::IntRect(0*41, 2*59, 41, 59));
                             sprite.move(kVel,0);
-                            direction=4;
+                            direction=1;
                         break;
 
                         case sf::Keyboard::Left:
@@ -235,13 +289,13 @@ int main()
                         case sf::Keyboard::Up:
                             sprite.setTextureRect(sf::IntRect(0*41, 3*59, 41, 59));
                             sprite.move(0,-kVel);
-                            direction=1;
+                            direction=2;
                         break;
                         
                         case sf::Keyboard::Down:
                             sprite.setTextureRect(sf::IntRect(0*41, 0*59, 41, 59));
                             sprite.move(0,kVel);
-                            direction=2;
+                            direction=4;
                         break;
                         
                         
@@ -264,13 +318,18 @@ int main()
         window.clear(sf::Color::White);
         window.draw(sprite);
         if(life)
-            p1.draw(window);
+            p0->draw(window);
         if(lifeA){
-            window.draw(rect1);
+            p1->draw(window);
+            p2->draw(window);
+            p3->draw(window);
+            p4->draw(window);
+            p5->draw(window);
+            /*window.draw(rect1);
             window.draw(rect2);
             window.draw(rect3);
             window.draw(rect4);
-            window.draw(rect5);
+            window.draw(rect5);*/
         }
         window.display();
     }
