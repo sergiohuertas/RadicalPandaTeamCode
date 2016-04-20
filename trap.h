@@ -5,14 +5,16 @@
 
 class trap {
 public:
-    trap();
-    trap(const trap& orig, int x, int y, int attack);
+    trap(int x, int y, int attack);
     virtual ~trap();    
     void doDamage(int e_speed);
     void drawTrap(sf::RenderWindow &window);
     int getplayerX();
     int getplayerY();
-    int getAttack();        
+    int getAttack(); 
+    //sf::FloatRect getBoundingBox();
+    
+    //sf::FloatRect lo; 
     
 private:    
     /*bool explosion;*/    
@@ -22,6 +24,7 @@ private:
     sf::Texture *textrap;
     sf::Sprite *spritetrap;
     sf::Clock *slow;
+    
 
 };
 
